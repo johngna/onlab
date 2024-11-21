@@ -1,44 +1,124 @@
 <div>
 
-    <div class="px-4 mx-auto mt-8 max-w-7xl">
+    @if($integra)
+    <style>
+        .water {
+            opacity: 0.8;
+            fill: #3B82F6;
+        }
+        .tank-body {
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+    </style>
+    @endif
 
-        <div class="grid grid-cols-1 p-6 mb-6 bg-white rounded-lg shadow-lg">
-            <div class="flex items-start">
-                <!-- Imagem do equipamento -->
-                <div class="w-48 h-48 mr-6 overflow-hidden bg-gray-200 rounded-lg">
-                    <img alt="Equipamento de Osmose Reversa - vista frontal, estilo técnico" src="/assets/img/filtro_1000.png" class="object-cover w-full h-full" width="192" height="192">
-                </div>
+    <div class="px-4 mx-auto mt-8 max-w-7xl" wire:poll.10s="fetchEquipmentData">
 
-                <div class="flex-1">
-                    <!-- Nome do equipamento -->
-                    <h1 class="text-2xl font-bold text-sky-800">{{$equipamento['name']}} - {{$equipamento['identifier']}}</h1>
-
-                    <!-- Informações do cliente -->
-                    <div class="mt-2">
-                        <p class="text-lg text-gray-600">Cliente: {{$cliente['description']}}</p>
-                        <p class="text-gray-500">{{$cliente['address']}}</p>
+        <div class="grid grid-cols-3 p-6 mb-6 bg-white rounded-lg shadow-lg">
+            <div class="col-span-2">
+                <div class="flex items-start ">
+                    <!-- Imagem do equipamento -->
+                    <div class="hidden w-48 h-48 mr-6 overflow-hidden bg-gray-200 rounded-lg sm:block">
+                        <img alt="Equipamento de Osmose Reversa - vista frontal, estilo técnico" src="/assets/img/filtro_1000.png" class="object-cover w-full h-full" width="192" height="192">
                     </div>
 
-                    <!-- Status e ações -->
-                    <div class="flex items-center gap-6 mt-4">
-                        <div class="flex items-center">
-                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <span class="ml-2 font-medium text-green-500">Em operação</span>
+                    <div class="flex-1">
+                        <!-- Nome do equipamento -->
+                        <h1 class="text-2xl font-bold text-sky-800">{{$equipamento['name']}} - {{$equipamento['identifier']}}</h1>
+
+                        <!-- Informações do cliente -->
+                        <div class="mt-2">
+                            <p class="text-lg text-gray-600">Cliente: {{$cliente['description']}}</p>
+                            <p class="text-gray-500">{{$cliente['address']}}</p>
                         </div>
 
-                        <div class="flex items-center">
-                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                            </svg>
-                            <span class="ml-2 font-medium text-red-500">0 Alertas</span>
+                        <!-- Status e ações -->
+                        <div class="flex items-center gap-6 mt-4">
+
+                            @if($avisos['status'])
+                            <div class="flex items-center">
+                                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span class="ml-2 font-medium text-green-500">{{$avisos['status']}}</span>
+                            </div>
+                            @endif
+
+                            @if($avisos['flags'])
+                            <div class="flex items-center">
+                                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <span class="ml-2 font-medium text-red-500">{{$avisos['flags']}}</span>
+                            </div>
+                            @endif
+
+                            @if($avisos['alarmes'])
+                            <div class="flex items-center px-3 py-1 bg-red-700">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <span class="ml-2 font-medium text-white ">{{$avisos['alarmes']}}</span>
+                            </div>
+                            @endif
+
+
                         </div>
-
-
                     </div>
                 </div>
             </div>
+
+            @if($integra)
+
+            <div class="col-span-1">
+
+                <div style="height: 180px; position: relative;">
+                    <svg id="waterTank" viewBox="0 0 200 200" style="width: 100%; height: 100%; margin: 0 auto;">
+                        <!-- Cylinder body -->
+                        <defs>
+                            <linearGradient id="cylinderGradient" x1="0%" y1="0%" x2="100%" y1="0%" >
+                                <stop offset="0%" style="stop-color:#e5e7eb" />
+                                <stop offset="50%" style="stop-color:#f3f4f6" />
+                                <stop offset="100%" style="stop-color:#d1d5db" />
+                            </linearGradient>
+                            <clipPath id="waterClip">
+                                <path d="M40 20 L160 20 Q180 20 180 30 L180 170 Q180 180 160 180 L40 180 Q20 180 20 170 L20 30 Q20 20 40 20 Z" />
+                            </clipPath>
+                        </defs>
+
+                        <!-- Cylinder container -->
+                        <path d="M40 20 L160 20 Q180 20 180 30 L180 170 Q180 180 160 180 L40 180 Q20 180 20 170 L20 30 Q20 20 40 20 Z"
+                              fill="url(#cylinderGradient)"
+                              stroke="#999"
+                              stroke-width="2"/>
+
+                        <!-- Water -->
+                        <g clip-path="url(#waterClip)">
+                            <path class="water"
+                                  opacity="0.8">
+                                <animate attributeName="d"
+                                         dur="2s"
+                                         repeatCount="indefinite"
+                                         values="
+                                            M0 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($readings[0]->gal_0 * 1.6) }} 100 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($readings[0]->gal_0 * 1.6) }} 200 {{ 180 - ($readings[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
+                                            M0 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q50 {{ 195 - ($readings[0]->gal_0 * 1.6) }} 100 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q150 {{ 165 - ($readings[0]->gal_0 * 1.6) }} 200 {{ 180 - ($readings[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
+                                            M0 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($readings[0]->gal_0 * 1.6) }} 100 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($readings[0]->gal_0 * 1.6) }} 200 {{ 180 - ($readings[0]->gal_0 * 1.6) }} L200 200 L0 200 Z"/>
+                            </path>
+                        </g>
+
+                        <!-- Level lines -->
+                        <line x1="40" y1="50" x2="160" y2="50" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+                        <line x1="40" y1="90" x2="160" y2="90" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+                        <line x1="40" y1="130" x2="160" y2="130" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+                        <line x1="40" y1="170" x2="160" y2="170" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+
+                        <!-- Top ellipse -->
+                        {{-- <ellipse cx="100" cy="20" rx="80" ry="10" fill="#f3f4f6" stroke="#999" stroke-width="2"/> --}}
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-sky-800">{{$readings[0]->gal_0}}%</div>
+                </div>
+            </div>
+            @endif
 
         </div>
 
@@ -46,7 +126,7 @@
         @if($integra)
 
             <!-- Cards de monitoramento -->
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-4" wire:poll.10s="fetchEquipmentData">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-4" >
                 <!-- Card Temperatura -->
                 @livewire('components.card-temperatura', ['sensor' => 'tplc1', 'readings' => $readings])
 
@@ -290,6 +370,8 @@
                         chart.data.datasets[0].data.shift();
                         chart.data.datasets[0].data.push(newReading[sensor_name]);
                         chart.update();
+
+                        document.getElementById(sensor_name + 'Value').innerText = newReading[sensor_name];
                     }
 
 

@@ -6,7 +6,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
             </svg> --}}
         </div>
-        <div class="mb-2 text-4xl font-bold text-center text-sky-800">{{$readings[0]->$sensor}}</div>
+        <div class="mb-2 text-4xl font-bold text-center text-sky-800"  id="{{$sensor}}Value">{{$readings[0]->$sensor}}</div>
         <div style="height: 120px;">
             <canvas id="{{$sensor}}Chart"></canvas>
         </div>

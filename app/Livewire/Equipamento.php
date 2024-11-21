@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\AlertReading;
 use Livewire\Component;
 use App\Models\SensorReading;
 use App\Services\AuvoService;
@@ -15,6 +16,7 @@ class Equipamento extends Component
     public $equipamento;
     public $cliente;
     public $integra = false;
+    public $avisos = [];
 
 
     public function mount(Request $request)
@@ -27,6 +29,11 @@ class Equipamento extends Component
 
         $this->readings = SensorReading::orderBy('created_at', 'desc')->take(12)->get();
         // $this->readings = SensorReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->take(12)->get();
+
+        $this->avisos = AlertReading::orderBy('created_at', 'desc')->first();
+        // $this->avisos = AlertReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
+
+
 
         $qtd = count($this->readings);
 
@@ -46,9 +53,19 @@ class Equipamento extends Component
     public function fetchEquipmentData()
     {
         // Lógica para obter os dados do equipamento
-        $this->readings = SensorReading::orderBy('created_at', 'desc')->take(12)->get();
+        $readings = SensorReading::orderBy('created_at', 'desc')->take(12)->get();
+        $avisos = AlertReading::orderBy('created_at', 'desc')->first();
 
-        $this->dispatch('refreshChartData', $this->readings);
+        //verifica se houve alteração nos dados
+        if($readings != $this->readings){
+            $this->readings = $readings;
+            $this->dispatch('refreshChartData', $this->readings);
+        }
+
+        if($avisos != $this->avisos){
+            $this->avisos = $avisos;
+        }
+
 
     }
 }
