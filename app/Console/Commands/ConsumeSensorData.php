@@ -29,35 +29,44 @@ class ConsumeSensorData extends Command
      */
     public function handle()
     {
-        $mqtt = new phpMQTT("ec2-54-207-218-159.sa-east-1.compute.amazonaws.com", 1883, "LaravelMQTTClient");
+        $mqtt = new phpMQTT("ec2-54-207-218-159.sa-east-1.compute.amazonaws.com", 1883, env('MQTT_NAME'));
         if ($mqtt->connect()) {
 
             $mqtt->debug = true;
             $this->info("Connected to MQTT broker");
 
-            $equipamentos = DB::table('equipamentos')->get();
-
             $topics = [];
-            foreach ($equipamentos as $equipamento) {
-                $topic = $equipamento->numero_serie . "/sensores";
-                $topics[$topic] = array('qos' => 0, 'function' => array($this, 'procMsgSensores'));
 
-                $topic = $equipamento->numero_serie . "/avisos";
-                $topics[$topic] = array('qos' => 0, 'function' => array($this, 'procMsgAvisos'));
-            }
+            // Assina todos os tópicos
+            $topics['#'] = array('qos' => 0, 'function' => function ($topic, $message) {
+
+                $this->processa($topic, $message);
+            });
 
             $mqtt->subscribe($topics, 0);
-            $this->info("Subscribed to topics");
 
+
+            // Processa as mensagens normalmente
             while ($mqtt->proc()) {
-
-
+                // Processamento contínuo
             }
 
             $mqtt->close();
             $this->info("MQTT connection closed");
         } else {
             $this->error("Failed to connect to MQTT broker");
+        }
+    }
+
+    public function processa($topic, $message)
+    {
+        $this->info("Received message on topic: $topic");
+        if (strpos($topic, 'sensores') !== false) {
+            $this->procMsgSensores($topic, $message);
+        } else if (strpos($topic, 'avisos') !== false) {
+            $this->procMsgAvisos($topic, $message);
+        }else{
+
         }
     }
 
@@ -88,7 +97,7 @@ class ConsumeSensorData extends Command
                     'gal_1' => (float) $data['Gal_1'],
                     'gal_2' => (float) $data['Gal_2'],
                     'gal_3' => (float) $data['Gal_3'],
-                    // 'created_at' => now(),
+                    'created_at' => now(),
                 ]);
             }
 

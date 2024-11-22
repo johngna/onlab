@@ -35,6 +35,7 @@
                         <!-- Status e ações -->
                         <div class="flex items-center gap-6 mt-4">
 
+                            @if($integra)
                             @if($avisos['status'])
                             <div class="flex items-center">
                                 <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,6 +44,7 @@
                                 <span class="ml-2 font-medium text-green-500">{{$avisos['status']}}</span>
                             </div>
                             @endif
+
 
                             @if($avisos['flags'])
                             <div class="flex items-center">
@@ -60,6 +62,7 @@
                                 </svg>
                                 <span class="ml-2 font-medium text-white ">{{$avisos['alarmes']}}</span>
                             </div>
+                            @endif
                             @endif
 
 
