@@ -5,20 +5,17 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Equipamento;
 use App\Services\AuvoService;
+use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends Component
 {
 
-    public $qtd_filtros;
     public $tasks = [];
     public $equipamentos = [];
     public $data_proxima_visita;
 
     public function render()
     {
-
-        $this->qtd_filtros = Equipamento::count();
-
 
         $this->getData();
 
@@ -36,8 +33,8 @@ class Dashboard extends Component
 
         $auvoService = new AuvoService();
 
-        $tasks = $auvoService->getTasks(14345220);
-        $equipamentos = $auvoService->getEquipments(14345220);
+        $tasks = $auvoService->getTasks(Auth::user()->customer_id);
+        $equipamentos = $auvoService->getEquipments(Auth::user()->customer_id);
 
         // dd($equipamentos);
 

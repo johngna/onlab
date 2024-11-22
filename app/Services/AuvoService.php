@@ -128,10 +128,14 @@ class AuvoService
     public function getEquipments($clientId)
     {
 
-        //json filter
-        $filter = urlencode(json_encode([
-            'associatedCustomerId' => $clientId,
-        ]));
+        if($clientId == ''){
+            $filter = '';
+
+        }else{
+            $filter = urlencode(json_encode([
+                'associatedCustomerId' => $clientId,
+            ]));
+        }
 
         $response = $this->makeRequest('get', 'equipments/', ['paramFilter' => $filter]);
 

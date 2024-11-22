@@ -4,6 +4,7 @@ use App\Livewire\Clientes\ListaCliente;
 use App\Livewire\Equipamento;
 use App\Livewire\Equipamentos\EquipamentoLista;
 use App\Livewire\Monitor;
+use App\Livewire\Usuarios;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,5 +28,7 @@ Route::middleware([
     Route::get('/monitor/{equipamento}', Monitor::class)->name('monitor');
 
     Route::get('equipamento/{numero_serie}', Equipamento::class)->name('equipamento');
+
+    Route::get('/usuarios', Usuarios::class)->name('usuarios');
 
 });

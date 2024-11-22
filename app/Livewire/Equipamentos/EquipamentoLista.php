@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Equipamentos;
 
+use App\Models\AlertReading;
 use App\Models\Equipamento;
 use Livewire\Component;
 use App\Services\AuvoService;
@@ -18,12 +19,37 @@ class EquipamentoLista extends Component
 
     public function render()
     {
+        $equipamentos = [];
 
-        $equipamentos = Equipamento::paginate(10);
+        $codes = AlertReading::groupBy('equipment_code')->get('equipment_code');
 
+        foreach ($codes as $code) {
+            $equip = $this->getEquipament($code->equipment_code);
+            $customer = $this->getClient($equip['associatedCustomerId']);
+            $equipamentos[$code->equipment_code] = [
+                'equipamento' => $equip,
+                'cliente' => $customer
+            ];
+        }
+
+        // dd($equipamentos);
 
         return view('livewire.equipamentos.equipamento-lista', compact('equipamentos'));
     }
+
+
+    public function getEquipament($code)
+    {
+        $this->auvoService = new AuvoService();
+        return $this->auvoService->getEquipmentData($code)['result']['entityList'][0];
+    }
+
+    public function getClient($id)
+    {
+        $this->auvoService = new AuvoService();
+        return $this->auvoService->getClient($id);
+    }
+
 
     public function getEquipAuvo()
     {

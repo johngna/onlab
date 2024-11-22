@@ -5,10 +5,12 @@ namespace App\Livewire\Clientes;
 use App\Models\Cliente;
 use Livewire\Component;
 use App\Services\AuvoService;
+use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\DB;
 
 class ListaCliente extends Component
 {
+    use WireUiActions;
 
     public $loading = false;
 
@@ -24,7 +26,7 @@ class ListaCliente extends Component
     public function syncAuvo(){
 
 
-        $this->loading = true;
+
 
 
         DB::table('clientes')->truncate();
@@ -66,7 +68,11 @@ class ListaCliente extends Component
 
 
 
-        $this->loading = false;
+        $this->dialog()->show([
+            'icon' => 'success',
+            'title' => 'Sincronização realizada com sucesso!',
+            'description' => 'Os clientes foram sincronizados com sucesso.',
+        ]);
 
 
 

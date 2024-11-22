@@ -36,14 +36,22 @@
                 </div>
               </div>
               <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
-                {{-- <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">Add money</button> --}}
+                @if(Auth::user()->role_id == 2)
                 <a href="https://suporteonlab.auvo.com.br/Ticket/Novo" target="blank" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">Abrir Chamado</a>
-              </div>
+                @endif
+            </div>
             </div>
           </div>
         </div>
 
-        @livewire('dashboard')
+        @if(Auth::user()->role_id == 1)
+            @livewire('admin')
+        @endif
+
+        @if(Auth::user()->role_id == 2)
+            @livewire('dashboard')
+        @endif
+
     </div>
 
 </x-app-layout>
