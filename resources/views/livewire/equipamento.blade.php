@@ -75,6 +75,8 @@
 
             <div class="col-span-1">
 
+                <h3 class="text-lg font-bold text-center text-gray-600">Reservatório Principal</h3>
+
                 <div style="height: 180px; position: relative;">
                     <svg id="waterTank" viewBox="0 0 200 200" style="width: 100%; height: 100%; margin: 0 auto;">
                         <!-- Cylinder body -->
