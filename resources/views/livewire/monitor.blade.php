@@ -102,7 +102,7 @@
 
 
             <!-- Cards de monitoramento -->
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-4" wire:poll.10s="fetchEquipmentData">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-4" wire:poll.5s="fetchEquipmentData">
                 <!-- Card Temperatura -->
                 @livewire('components.card-temperatura', ['sensor' => 'tplc1', 'readings' => $readings])
 

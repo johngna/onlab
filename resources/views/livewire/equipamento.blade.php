@@ -12,7 +12,7 @@
     </style>
     @endif
 
-    <div class="px-4 mx-auto mt-8 max-w-7xl" wire:poll.10s="fetchEquipmentData">
+    <div class="px-4 mx-auto mt-8 max-w-7xl" wire:poll.5s="fetchEquipmentData">
 
         <div class="grid grid-cols-3 p-6 mb-6 bg-white rounded-lg shadow-lg">
             <div class="col-span-2">
