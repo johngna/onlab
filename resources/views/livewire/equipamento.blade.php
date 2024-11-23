@@ -12,7 +12,15 @@
     </style>
     @endif
 
+
+
     <div class="px-4 mx-auto mt-8 max-w-7xl" wire:poll.5s="fetchEquipmentData">
+
+        @if($status == 'online')
+            <span class="block p-2 text-center text-green-500 bg-green-200 rounded-lg">On-line</span>
+        @else
+            <span class="block p-2 text-center text-red-500 bg-red-200 rounded-lg">Off-line - ultima atualização {{$ultima_atualizacao}}</span>
+        @endif
 
         <div class="grid grid-cols-3 p-6 mb-6 bg-white rounded-lg shadow-lg">
             <div class="col-span-2">
@@ -24,7 +32,7 @@
 
                     <div class="flex-1">
                         <!-- Nome do equipamento -->
-                        <h1 class="text-2xl font-bold text-sky-800">{{$equipamento['name']}} - {{$equipamento['identifier']}}</h1>
+                        <h1 class="text-2xl font-bold text-sky-800">{{$equipamento['name']}} - {{$equipamento['identifier']}}  </h1>
 
                         <!-- Informações do cliente -->
                         <div class="mt-2">
@@ -148,9 +156,12 @@
 
 
                 <!-- Fluxo -->
-                @livewire('components.card-fluxo', ['readings' => $readings, 'sensor' => 'fx_in'])
 
                 @livewire('components.card-fluxo', ['readings' => $readings, 'sensor' => 'fx_md'])
+
+                @livewire('components.card-fluxo', ['readings' => $readings, 'sensor' => 'fx_in'])
+
+
 
 
 
@@ -166,13 +177,13 @@
                 @livewire('components.card-pressao', ['readings' => $readings, 'sensor' => 't_pre'])
 
                 <!-- Card Nível do Galão -->
-                @livewire('components.card-galao', ['readings' => $readings, 'sensor' => 'gal_0'])
+                {{-- @livewire('components.card-galao', ['readings' => $reservs, 'sensor' => 'gal_0'])
 
-                @livewire('components.card-galao', ['readings' => $readings, 'sensor' => 'gal_1'])
+                @livewire('components.card-galao', ['readings' => $reservs, 'sensor' => 'gal_1'])
 
-                @livewire('components.card-galao', ['readings' => $readings, 'sensor' => 'gal_2'])
+                @livewire('components.card-galao', ['readings' => $reservs, 'sensor' => 'gal_2'])
 
-                @livewire('components.card-galao', ['readings' => $readings, 'sensor' => 'gal_3'])
+                @livewire('components.card-galao', ['readings' => $reservs, 'sensor' => 'gal_3']) --}}
 
 
             </div>
@@ -327,10 +338,10 @@
                         createChart(generateTimeLabels, chartConfig, 'Condutividade Feed (µS/cm)', readings, 'cd_ou');
                         createChart(generateTimeLabels, chartConfig, 'Condutividade Entrada (µS/cm)', readings, 'cd_in');
                         createChart(generateTimeLabels, chartConfig, 'Condutividade Pós Membrana (µS/cm)', readings, 'cd_md');
-                        createChart(generateTimeLabels, chartConfig, 'Nível do Galão (%)', readings, 'gal_0');
-                        createChart(generateTimeLabels, chartConfig, 'Nível do Galão 2(%)', readings, 'gal_1');
-                        createChart(generateTimeLabels, chartConfig, 'Nível do Galão 3(%)', readings, 'gal_2');
-                        createChart(generateTimeLabels, chartConfig, 'Nível do Galão 4(%)', readings, 'gal_3');
+                        // createChart(generateTimeLabels, chartConfig, 'Nível do Galão (%)', readings, 'gal_0');
+                        // createChart(generateTimeLabels, chartConfig, 'Nível do Galão 2(%)', readings, 'gal_1');
+                        // createChart(generateTimeLabels, chartConfig, 'Nível do Galão 3(%)', readings, 'gal_2');
+                        // createChart(generateTimeLabels, chartConfig, 'Nível do Galão 4(%)', readings, 'gal_3');
                         createChart(generateTimeLabels, chartConfig, 'Pressão (psi)', readings, 't_pre');
                         createChart(generateTimeLabels, chartConfig, 'Fluxo Pós Membrana (L/min)', readings, 'fx_md');
                         createChart(generateTimeLabels, chartConfig, 'Fluxo Entrada (L/min)', readings, 'fx_in');
@@ -347,10 +358,10 @@
                         const cd_ouChart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'cd_ouChart')[0];
                         const cd_inChart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'cd_inChart')[0];
                         const cd_mdChart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'cd_mdChart')[0];
-                        const gal_0Chart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'gal_0Chart')[0];
-                        const gal_1Chart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'gal_1Chart')[0];
-                        const gal_2Chart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'gal_2Chart')[0];
-                        const gal_3Chart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'gal_3Chart')[0];
+                        // const gal_0Chart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'gal_0Chart')[0];
+                        // const gal_1Chart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'gal_1Chart')[0];
+                        // const gal_2Chart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'gal_2Chart')[0];
+                        // const gal_3Chart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'gal_3Chart')[0];
                         const t_preChart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 't_preChart')[0];
                         const fx_mdChart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'fx_mdChart')[0];
                         const fx_inChart = Object.values(Chart.instances).filter(instance => instance.canvas.id === 'fx_inChart')[0];
@@ -361,10 +372,10 @@
                         updateChart(cd_ouChart, readings[0][0], 'cd_ou');
                         updateChart(cd_inChart, readings[0][0], 'cd_in');
                         updateChart(cd_mdChart, readings[0][0], 'cd_md');
-                        updateChart(gal_0Chart, readings[0][0], 'gal_0');
-                        updateChart(gal_1Chart, readings[0][0], 'gal_1');
-                        updateChart(gal_2Chart, readings[0][0], 'gal_2');
-                        updateChart(gal_3Chart, readings[0][0], 'gal_3');
+                        // updateChart(gal_0Chart, readings[0][0], 'gal_0');
+                        // updateChart(gal_1Chart, readings[0][0], 'gal_1');
+                        // updateChart(gal_2Chart, readings[0][0], 'gal_2');
+                        // updateChart(gal_3Chart, readings[0][0], 'gal_3');
                         updateChart(t_preChart, readings[0][0], 't_pre');
                         updateChart(fx_mdChart, readings[0][0], 'fx_md');
                         updateChart(fx_inChart, readings[0][0], 'fx_in');

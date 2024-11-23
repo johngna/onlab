@@ -70,6 +70,8 @@ class ConsumeSensorData extends Command
             $this->procMsgAvisos($topic, $message);
         } else if (strpos($topic, 'reservatorios') !== false) {
             $this->procMsgReserv($topic, $message);
+        } else if (strpos($topic, 'dados_gerais') !== false) {
+            $this->procMsgDados($topic, $message);
         }else{
 
         }
@@ -86,6 +88,9 @@ class ConsumeSensorData extends Command
 
         if ($data) {
             if ($count > 0 && $this->isDuplicate($last, $data)) {
+
+                //se ultimo registro for maior que 30 segundos setar status offline
+
 
             }else{
                 DB::table('sensor_readings')->insert([
@@ -188,6 +193,22 @@ class ConsumeSensorData extends Command
         }
     }
 
+    private function procMsgDados($topic, $msg)
+    {
+
+        $equipamento = explode('/', $topic)[0];
+
+        $data = json_decode($msg, true);
+
+        DB::table('data_readings')->insert([
+            'equipment_code' => $equipamento,
+            'modelo' => $data['Modelo'],
+            'data' => \Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['Data'] . ' ' . $data['Tempo']),
+            'created_at' => now(),
+        ]);
+
+    }
+
     private function isDuplicate($last, $data)
     {
         return $last->cd_ou == $data['Pu_ou'] &&
@@ -214,4 +235,6 @@ class ConsumeSensorData extends Command
                $last->gal_2 == $data['Gal_2'] &&
                $last->gal_3 == $data['Gal_3'];
     }
+
+
 }

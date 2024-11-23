@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\AlertReading;
+use App\Models\DataReadings;
 use App\Models\ReservReading;
 use Livewire\Component;
 use App\Models\SensorReading;
@@ -19,6 +20,8 @@ class Equipamento extends Component
     public $integra = false;
     public $avisos = [];
     public $reservs = [];
+    public $status = 'online';
+    public $ultima_atualizacao;
 
 
     public function mount(Request $request)
@@ -37,7 +40,14 @@ class Equipamento extends Component
 
         $this->reservs = ReservReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->take(12)->get();
 
-        // dd($this->reservs);
+        $last_reading = DataReadings::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
+
+            if($last_reading){
+                $last_reading_time = strtotime($last_reading->created_at);
+                $current_time = strtotime(date('Y-m-d H:i:s'));
+                $this->status = ($current_time - $last_reading_time) > 30 ? 'offline' : 'online';
+                $this->ultima_atualizacao = date('d/m/Y H:i:s', strtotime($last_reading->created_at));
+            }
 
         $qtd = count($this->readings);
 
@@ -71,6 +81,17 @@ class Equipamento extends Component
         if($readings != $this->readings){
             $this->readings = $readings;
             $this->dispatch('refreshChartData', $this->readings);
+        }else{
+
+            $last_reading = DataReadings::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
+
+            if($last_reading){
+                $last_reading_time = strtotime($last_reading->created_at);
+                $current_time = strtotime(date('Y-m-d H:i:s'));
+                $this->status = ($current_time - $last_reading_time) > 30 ? 'offline' : 'online';
+            }
+
+
         }
 
         if($avisos != $this->avisos){
