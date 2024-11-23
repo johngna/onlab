@@ -90,9 +90,9 @@ class ConsumeSensorData extends Command
             }else{
                 DB::table('sensor_readings')->insert([
                     'equipment_code' => $equipamento,
-                    'cd_ou' => (int) $data['Pu_ou'],
-                    'cd_md' => (int) $data['Pu_md'],
-                    'cd_in' => (int) $data['Pu_in'],
+                    'cd_ou' => (float) $data['Pu_ou'],
+                    'cd_md' => (float) $data['Pu_md'],
+                    'cd_in' => (float) $data['Pu_in'],
                     'fx_md' => (float) $data['Fx_md'],
                     'fx_in' => (float) $data['Fx_in'],
                     'temp1' => (float) $data['Temp1'],
