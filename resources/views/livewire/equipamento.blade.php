@@ -232,7 +232,7 @@
                         </tr>
                         <tr>
                             <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Nível do Galão (%)</td>
-                            @foreach($readings as $reading)
+                            @foreach($reservs as $reading)
                                 <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{$reading->gal_0}}</td>
                             @endforeach
                         </tr>

@@ -115,10 +115,10 @@
                       </td>
 
                       <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        @if($e['equipamento']['active'] == 'true')
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize"> Ativo </span>
+                        @if($e['status'] == 'online')
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize"> On-line </span>
                         @else
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 capitalize"> Inativo </span>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 capitalize"> Off-line </span>
                         @endif
                     </td>
                     </tr>
