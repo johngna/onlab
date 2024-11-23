@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\AlertReading;
+use App\Models\ReservReading;
 use Livewire\Component;
 use App\Models\SensorReading;
 use App\Services\AuvoService;
@@ -17,6 +18,7 @@ class Equipamento extends Component
     public $cliente;
     public $integra = false;
     public $avisos = [];
+    public $reservs = [];
 
 
     public function mount(Request $request)
@@ -27,13 +29,15 @@ class Equipamento extends Component
 
         $this->cliente = $auvoService->getClient($this->equipamento['associatedCustomerId']);
 
-        $this->readings = SensorReading::orderBy('created_at', 'desc')->take(12)->get();
-        // $this->readings = SensorReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->take(12)->get();
+        //$this->readings = SensorReading::orderBy('created_at', 'desc')->take(12)->get();
+         $this->readings = SensorReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->take(12)->get();
 
-        $this->avisos = AlertReading::orderBy('created_at', 'desc')->first();
-        // $this->avisos = AlertReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
+        //$this->avisos = AlertReading::orderBy('created_at', 'desc')->first();
+         $this->avisos = AlertReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
 
+        $this->reservs = ReservReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->take(12)->get();
 
+        // dd($this->reservs);
 
         $qtd = count($this->readings);
 
@@ -53,8 +57,15 @@ class Equipamento extends Component
     public function fetchEquipmentData()
     {
         // Lógica para obter os dados do equipamento
-        $readings = SensorReading::orderBy('created_at', 'desc')->take(12)->get();
-        $avisos = AlertReading::orderBy('created_at', 'desc')->first();
+        // $readings = SensorReading::orderBy('created_at', 'desc')->take(12)->get();
+        $readings = SensorReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->take(12)->get();
+
+        // $avisos = AlertReading::orderBy('created_at', 'desc')->first();
+        $avisos = AlertReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
+
+
+        $this->reservs = ReservReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->take(12)->get();
+
 
         //verifica se houve alteração nos dados
         if($readings != $this->readings){

@@ -158,13 +158,13 @@
                             @endforeach
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Temperatura Ambiente (°C)</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Temperatura Água (°C)</td>
                             @foreach($readings as $reading)
                                 <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{$reading->temp1}}</td>
                             @endforeach
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Condutividade (µS/cm)</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Condutividade Feed (µS/cm)</td>
                             @foreach($readings as $reading)
                                 <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{$reading->cd_ou}}</td>
                             @endforeach
@@ -176,7 +176,7 @@
                             @endforeach
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Condutividade Média (µS/cm)</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Condutividade Pós Membrana (µS/cm)</td>
                             @foreach($readings as $reading)
                                 <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{$reading->cd_md}}</td>
                             @endforeach
@@ -194,7 +194,7 @@
                             @endforeach
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Fluxo (L/min)</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Fluxo Pós Membrana (L/min)</td>
                             @foreach($readings as $reading)
                                 <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{$reading->fx_md}}</td>
                             @endforeach
@@ -289,16 +289,16 @@
 
                     // Criação dos gráficos
                     createChart(generateTimeLabels, chartConfig, 'Temperatura Placa (°C)', readings, 'tplc1');
-                    createChart(generateTimeLabels, chartConfig, 'Temperatura Ambiente (°C)', readings, 'temp1');
-                    createChart(generateTimeLabels, chartConfig, 'Condutividade (µS/cm)', readings, 'cd_ou');
+                    createChart(generateTimeLabels, chartConfig, 'Temperatura Água (°C)', readings, 'temp1');
+                    createChart(generateTimeLabels, chartConfig, 'Condutividade Feed (µS/cm)', readings, 'cd_ou');
                     createChart(generateTimeLabels, chartConfig, 'Condutividade Entrada (µS/cm)', readings, 'cd_in');
-                    createChart(generateTimeLabels, chartConfig, 'Condutividade Média (µS/cm)', readings, 'cd_md');
+                    createChart(generateTimeLabels, chartConfig, 'Condutividade Pós Membrana (µS/cm)', readings, 'cd_md');
                     createChart(generateTimeLabels, chartConfig, 'Nível do Galão (%)', readings, 'gal_0');
                     createChart(generateTimeLabels, chartConfig, 'Nível do Galão 2(%)', readings, 'gal_1');
                     createChart(generateTimeLabels, chartConfig, 'Nível do Galão 3(%)', readings, 'gal_2');
                     createChart(generateTimeLabels, chartConfig, 'Nível do Galão 4(%)', readings, 'gal_3');
                     createChart(generateTimeLabels, chartConfig, 'Pressão (psi)', readings, 't_pre');
-                    createChart(generateTimeLabels, chartConfig, 'Fluxo (L/min)', readings, 'fx_md');
+                    createChart(generateTimeLabels, chartConfig, 'Fluxo Pós Membrana (L/min)', readings, 'fx_md');
                     createChart(generateTimeLabels, chartConfig, 'Fluxo Entrada (L/min)', readings, 'fx_in');
 
                 });

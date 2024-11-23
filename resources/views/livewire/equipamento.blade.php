@@ -56,7 +56,7 @@
                             @endif
 
                             @if($avisos['alarmes'])
-                            <div class="flex items-center px-3 py-1 bg-red-700">
+                            <div class="flex items-center px-3 py-1 bg-red-700 animate-pulse">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                                 </svg>
@@ -103,9 +103,9 @@
                                          dur="2s"
                                          repeatCount="indefinite"
                                          values="
-                                            M0 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($readings[0]->gal_0 * 1.6) }} 100 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($readings[0]->gal_0 * 1.6) }} 200 {{ 180 - ($readings[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
-                                            M0 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q50 {{ 195 - ($readings[0]->gal_0 * 1.6) }} 100 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q150 {{ 165 - ($readings[0]->gal_0 * 1.6) }} 200 {{ 180 - ($readings[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
-                                            M0 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($readings[0]->gal_0 * 1.6) }} 100 {{ 180 - ($readings[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($readings[0]->gal_0 * 1.6) }} 200 {{ 180 - ($readings[0]->gal_0 * 1.6) }} L200 200 L0 200 Z"/>
+                                            M0 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($reservs[0]->gal_0 * 1.6) }} 100 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($reservs[0]->gal_0 * 1.6) }} 200 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
+                                            M0 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q50 {{ 195 - ($reservs[0]->gal_0 * 1.6) }} 100 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q150 {{ 165 - ($reservs[0]->gal_0 * 1.6) }} 200 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
+                                            M0 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($reservs[0]->gal_0 * 1.6) }} 100 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($reservs[0]->gal_0 * 1.6) }} 200 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} L200 200 L0 200 Z"/>
                             </path>
                         </g>
 
@@ -118,7 +118,7 @@
                         <!-- Top ellipse -->
                         {{-- <ellipse cx="100" cy="20" rx="80" ry="10" fill="#f3f4f6" stroke="#999" stroke-width="2"/> --}}
                     </svg>
-                    <div class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-sky-800">{{$readings[0]->gal_0}}%</div>
+                    <div class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-sky-800">{{$reservs[0]->gal_0}}%</div>
                 </div>
             </div>
             @endif
@@ -130,17 +130,34 @@
 
             <!-- Cards de monitoramento -->
             <div class="grid grid-cols-1 gap-6 md:grid-cols-4" >
-                <!-- Card Temperatura -->
-                @livewire('components.card-temperatura', ['sensor' => 'tplc1', 'readings' => $readings])
 
-                @livewire('components.card-temperatura', ['sensor' => 'temp1', 'readings' => $readings])
 
                 <!-- Card Condutivímetro -->
-                @livewire('components.card-condutividade', ['readings' => $readings, 'sensor' => 'cd_ou'])
 
                 @livewire('components.card-condutividade', ['readings' => $readings, 'sensor' => 'cd_in'])
 
                 @livewire('components.card-condutividade', ['readings' => $readings, 'sensor' => 'cd_md'])
+
+                @livewire('components.card-condutividade', ['readings' => $readings, 'sensor' => 'cd_ou'])
+
+
+                <!-- Fluxo -->
+                @livewire('components.card-fluxo', ['readings' => $readings, 'sensor' => 'fx_in'])
+
+                @livewire('components.card-fluxo', ['readings' => $readings, 'sensor' => 'fx_md'])
+
+
+
+
+                <!-- Card Temperatura -->
+
+                @livewire('components.card-temperatura', ['sensor' => 'temp1', 'readings' => $readings])
+
+                @livewire('components.card-temperatura', ['sensor' => 'tplc1', 'readings' => $readings])
+
+
+                <!-- Pressão -->
+                @livewire('components.card-pressao', ['readings' => $readings, 'sensor' => 't_pre'])
 
                 <!-- Card Nível do Galão -->
                 @livewire('components.card-galao', ['readings' => $readings, 'sensor' => 'gal_0'])
@@ -150,18 +167,6 @@
                 @livewire('components.card-galao', ['readings' => $readings, 'sensor' => 'gal_2'])
 
                 @livewire('components.card-galao', ['readings' => $readings, 'sensor' => 'gal_3'])
-
-
-                <!-- Pressão -->
-                @livewire('components.card-pressao', ['readings' => $readings, 'sensor' => 't_pre'])
-
-                <!-- Fluxo -->
-                @livewire('components.card-fluxo', ['readings' => $readings, 'sensor' => 'fx_md'])
-
-                @livewire('components.card-fluxo', ['readings' => $readings, 'sensor' => 'fx_in'])
-
-
-
 
 
             </div>
@@ -185,13 +190,13 @@
                             @endforeach
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Temperatura Ambiente (°C)</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Temperatura Água (°C)</td>
                             @foreach($readings as $reading)
                                 <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{$reading->temp1}}</td>
                             @endforeach
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Condutividade (µS/cm)</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Condutividade Feed (µS/cm)</td>
                             @foreach($readings as $reading)
                                 <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{$reading->cd_ou}}</td>
                             @endforeach
@@ -203,7 +208,7 @@
                             @endforeach
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Condutividade Média (µS/cm)</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Condutividade Pós Membrana (µS/cm)</td>
                             @foreach($readings as $reading)
                                 <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{$reading->cd_md}}</td>
                             @endforeach
@@ -221,7 +226,7 @@
                             @endforeach
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Fluxo (L/min)</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Fluxo Pós Membrana (L/min)</td>
                             @foreach($readings as $reading)
                                 <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{$reading->fx_md}}</td>
                             @endforeach
@@ -312,16 +317,16 @@
 
                         // Criação dos gráficos
                         createChart(generateTimeLabels, chartConfig, 'Temperatura Placa (°C)', readings, 'tplc1');
-                        createChart(generateTimeLabels, chartConfig, 'Temperatura Ambiente (°C)', readings, 'temp1');
-                        createChart(generateTimeLabels, chartConfig, 'Condutividade (µS/cm)', readings, 'cd_ou');
+                        createChart(generateTimeLabels, chartConfig, 'Temperatura Água (°C)', readings, 'temp1');
+                        createChart(generateTimeLabels, chartConfig, 'Condutividade Feed (µS/cm)', readings, 'cd_ou');
                         createChart(generateTimeLabels, chartConfig, 'Condutividade Entrada (µS/cm)', readings, 'cd_in');
-                        createChart(generateTimeLabels, chartConfig, 'Condutividade Média (µS/cm)', readings, 'cd_md');
+                        createChart(generateTimeLabels, chartConfig, 'Condutividade Pós Membrana (µS/cm)', readings, 'cd_md');
                         createChart(generateTimeLabels, chartConfig, 'Nível do Galão (%)', readings, 'gal_0');
                         createChart(generateTimeLabels, chartConfig, 'Nível do Galão 2(%)', readings, 'gal_1');
                         createChart(generateTimeLabels, chartConfig, 'Nível do Galão 3(%)', readings, 'gal_2');
                         createChart(generateTimeLabels, chartConfig, 'Nível do Galão 4(%)', readings, 'gal_3');
                         createChart(generateTimeLabels, chartConfig, 'Pressão (psi)', readings, 't_pre');
-                        createChart(generateTimeLabels, chartConfig, 'Fluxo (L/min)', readings, 'fx_md');
+                        createChart(generateTimeLabels, chartConfig, 'Fluxo Pós Membrana (L/min)', readings, 'fx_md');
                         createChart(generateTimeLabels, chartConfig, 'Fluxo Entrada (L/min)', readings, 'fx_in');
 
                     });
