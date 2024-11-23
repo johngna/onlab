@@ -134,11 +134,15 @@
 
                 <!-- Card Condutivímetro -->
 
-                @livewire('components.card-condutividade', ['readings' => $readings, 'sensor' => 'cd_in'])
+                @livewire('components.card-condutividade', ['readings' => $readings, 'sensor' => 'cd_ou'])
 
                 @livewire('components.card-condutividade', ['readings' => $readings, 'sensor' => 'cd_md'])
 
-                @livewire('components.card-condutividade', ['readings' => $readings, 'sensor' => 'cd_ou'])
+                @livewire('components.card-condutividade', ['readings' => $readings, 'sensor' => 'cd_in'])
+
+
+
+
 
 
                 <!-- Fluxo -->
