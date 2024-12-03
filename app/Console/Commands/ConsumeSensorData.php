@@ -102,7 +102,7 @@ class ConsumeSensorData extends Command
                     'fx_in' => (float) $data['Fx_in'],
                     'temp1' => (float) $data['Temp1'],
                     'tplc1' => (float) $data['Tplc1'],
-                    't_pre' => (float) $data['T_pre'],
+                    't_pre' => (float) $data['Tr_pres'],
                     // 'gal_0' => (float) $data['Gal_0'],
                     // 'gal_1' => (float) $data['Gal_1'],
                     // 'gal_2' => (float) $data['Gal_2'],
@@ -203,7 +203,7 @@ class ConsumeSensorData extends Command
         DB::table('data_readings')->insert([
             'equipment_code' => $equipamento,
             'modelo' => $data['Modelo'],
-            'data' => \Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['Data'] . ' ' . $data['Tempo']),
+            'data' => \Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['Data'] . ' ' . $data['Hora']),
             'created_at' => now(),
         ]);
 
