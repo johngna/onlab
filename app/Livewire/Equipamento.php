@@ -54,7 +54,7 @@ class Equipamento extends Component
             if($last_reading){
                 $last_reading_time = strtotime($last_reading->created_at);
                 $current_time = strtotime(date('Y-m-d H:i:s'));
-                $this->status = ($current_time - $last_reading_time) > 30 ? 'offline' : 'online';
+                $this->status = ($current_time - $last_reading_time) > 60 ? 'offline' : 'online';
                 $this->ultima_atualizacao = date('d/m/Y H:i:s', strtotime($last_reading->created_at));
             }
 
@@ -97,7 +97,7 @@ class Equipamento extends Component
             if($last_reading){
                 $last_reading_time = strtotime($last_reading->created_at);
                 $current_time = strtotime(date('Y-m-d H:i:s'));
-                $this->status = ($current_time - $last_reading_time) > 30 ? 'offline' : 'online';
+                $this->status = ($current_time - $last_reading_time) > 60 ? 'offline' : 'online';
             }
 
 
