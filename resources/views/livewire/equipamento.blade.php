@@ -22,8 +22,8 @@
             <span class="block p-2 text-center text-red-500 bg-red-200 rounded-lg">Off-line - ultima atualização {{$ultima_atualizacao}}</span>
         @endif
 
-        <div class="grid grid-cols-3 p-6 mb-6 bg-white rounded-lg shadow-lg">
-            <div class="col-span-2">
+        <div class="grid grid-cols-6 p-6 mb-6 bg-white rounded-lg shadow-lg">
+            <div class="col-span-4">
                 <div class="flex items-start ">
                     <!-- Imagem do equipamento -->
                     <div class="hidden w-48 h-48 mr-6 overflow-hidden bg-gray-200 rounded-lg sm:block">
@@ -75,62 +75,79 @@
 
 
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            @if($integra)
-
-            <div class="col-span-1">
-
-                <h3 class="text-lg font-bold text-center text-gray-600">Reservatório Principal</h3>
-
-                <div style="height: 180px; position: relative;">
-                    <svg id="waterTank" viewBox="0 0 200 200" style="width: 100%; height: 100%; margin: 0 auto;">
-                        <!-- Cylinder body -->
-                        <defs>
-                            <linearGradient id="cylinderGradient" x1="0%" y1="0%" x2="100%" y1="0%" >
-                                <stop offset="0%" style="stop-color:#e5e7eb" />
-                                <stop offset="50%" style="stop-color:#f3f4f6" />
-                                <stop offset="100%" style="stop-color:#d1d5db" />
-                            </linearGradient>
-                            <clipPath id="waterClip">
-                                <path d="M40 20 L160 20 Q180 20 180 30 L180 170 Q180 180 160 180 L40 180 Q20 180 20 170 L20 30 Q20 20 40 20 Z" />
-                            </clipPath>
-                        </defs>
-
-                        <!-- Cylinder container -->
-                        <path d="M40 20 L160 20 Q180 20 180 30 L180 170 Q180 180 160 180 L40 180 Q20 180 20 170 L20 30 Q20 20 40 20 Z"
-                              fill="url(#cylinderGradient)"
-                              stroke="#999"
-                              stroke-width="2"/>
-
-                        <!-- Water -->
-                        <g clip-path="url(#waterClip)">
-                            <path class="water"
-                                  opacity="0.8">
-                                <animate attributeName="d"
-                                         dur="2s"
-                                         repeatCount="indefinite"
-                                         values="
-                                            M0 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($reservs[0]->gal_0 * 1.6) }} 100 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($reservs[0]->gal_0 * 1.6) }} 200 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
-                                            M0 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q50 {{ 195 - ($reservs[0]->gal_0 * 1.6) }} 100 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q150 {{ 165 - ($reservs[0]->gal_0 * 1.6) }} 200 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
-                                            M0 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($reservs[0]->gal_0 * 1.6) }} 100 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($reservs[0]->gal_0 * 1.6) }} 200 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} L200 200 L0 200 Z"/>
-                            </path>
-                        </g>
-
-                        <!-- Level lines -->
-                        <line x1="40" y1="50" x2="160" y2="50" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
-                        <line x1="40" y1="90" x2="160" y2="90" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
-                        <line x1="40" y1="130" x2="160" y2="130" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
-                        <line x1="40" y1="170" x2="160" y2="170" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
-
-                        <!-- Top ellipse -->
-                        {{-- <ellipse cx="100" cy="20" rx="80" ry="10" fill="#f3f4f6" stroke="#999" stroke-width="2"/> --}}
-                    </svg>
-                    <div class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-sky-800">{{$reservs[0]->gal_0}}%</div>
-                </div>
+            <div class="flex flex-col items-start justify-start col-span-1 text-gray-600">
+                <h3 class="font-bold text-center text-gray-600 text-md">Tempos</h3>
+                <div>Tempo Prime:<span class="font-medium"> {{ $times['t_prime'] ?? ''}}</span></div>
+                <div>Tempo Loop:<span class="font-medium"> {{ $times['t_loop'] ?? ''}}</span></div>
+                <div>Tempo Produção: <span class="font-medium">{{ $times['t_prod'] ?? ''}}</span></div>
+                <div>Tempo Dados: <span class="font-medium">{{ $times['t_dados'] ?? ''}}</span></div>
             </div>
+
+            @if($integra)
+                <div class="flex justify-end col-span-1">
+                    <div class="pr-8">
+                        <h3 class="font-bold text-center text-gray-600 text-md">Reservatório Principal</h3>
+                        <div style="height: 180px; position: relative;">
+                            <svg id="waterTank" viewBox="0 0 200 200" style="width: 100%; height: 100%; margin: 0 auto;">
+                                <!-- Cylinder body -->
+                                <defs>
+                                    <linearGradient id="cylinderGradient" x1="0%" y1="0%" x2="100%" y1="0%" >
+                                        <stop offset="0%" style="stop-color:#e5e7eb" />
+                                        <stop offset="50%" style="stop-color:#f3f4f6" />
+                                        <stop offset="100%" style="stop-color:#d1d5db" />
+                                    </linearGradient>
+                                    <clipPath id="waterClip">
+                                        <path d="M40 20 L160 20 Q180 20 180 30 L180 170 Q180 180 160 180 L40 180 Q20 180 20 170 L20 30 Q20 20 40 20 Z" />
+                                    </clipPath>
+                                </defs>
+
+                                <!-- Cylinder container -->
+                                <path d="M40 20 L160 20 Q180 20 180 30 L180 170 Q180 180 160 180 L40 180 Q20 180 20 170 L20 30 Q20 20 40 20 Z"
+                                    fill="url(#cylinderGradient)"
+                                    stroke="#999"
+                                    stroke-width="2"/>
+
+                                <!-- Water -->
+                                <g clip-path="url(#waterClip)">
+                                    <path class="water"
+                                        opacity="0.8">
+                                        <animate attributeName="d"
+                                                dur="2s"
+                                                repeatCount="indefinite"
+                                                values="
+                                                    M0 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($reservs[0]->gal_0 * 1.6) }} 100 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($reservs[0]->gal_0 * 1.6) }} 200 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
+                                                    M0 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q50 {{ 195 - ($reservs[0]->gal_0 * 1.6) }} 100 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q150 {{ 165 - ($reservs[0]->gal_0 * 1.6) }} 200 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} L200 200 L0 200 Z;
+                                                    M0 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q50 {{ 165 - ($reservs[0]->gal_0 * 1.6) }} 100 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} Q150 {{ 195 - ($reservs[0]->gal_0 * 1.6) }} 200 {{ 180 - ($reservs[0]->gal_0 * 1.6) }} L200 200 L0 200 Z"/>
+                                    </path>
+                                </g>
+
+                                <!-- Level lines -->
+                                <line x1="40" y1="50" x2="160" y2="50" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+                                <line x1="40" y1="90" x2="160" y2="90" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+                                <line x1="40" y1="130" x2="160" y2="130" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+                                <line x1="40" y1="170" x2="160" y2="170" stroke="#999" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+
+                                <!-- Top ellipse -->
+                                {{-- <ellipse cx="100" cy="20" rx="80" ry="10" fill="#f3f4f6" stroke="#999" stroke-width="2"/> --}}
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-sky-800">{{$reservs[0]->gal_0}}%</div>
+
+
+
+                            <!-- Bolinhas de nível -->
+                            <div class="absolute top-0 right-0 flex flex-col justify-between " style="height: 150px; margim-top: 20%">
+                                <div class="w-3 h-3 rounded-full @if($levels['s3'] == 'ON') bg-sky-700 @else bg-gray-700  @endif" style="position: absolute; top: 20%;"></div>
+                                <div class="w-3 h-3 rounded-full @if($levels['s2'] == 'ON') bg-sky-700 @else bg-gray-700  @endif" style="position: absolute; top: 40%;"></div>
+                                <div class="w-3 h-3 rounded-full @if($levels['s1'] == 'ON') bg-sky-700 @else bg-gray-700  @endif" style="position: absolute; top: 90%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endif
 
         </div>

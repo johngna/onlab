@@ -42,7 +42,7 @@ class ConsumeSensorData extends Command
             // Assina todos os tópicos
             $topics['#'] = array('qos' => 0, 'function' => function ($topic, $message) {
 
-                $this->info("Received message on topic: $topic. Message: $message");
+
                 $this->processa($topic, $message);
             });
 
@@ -63,15 +63,19 @@ class ConsumeSensorData extends Command
 
     public function processa($topic, $message)
     {
-        // $this->info("Received message on topic: $topic. Message: $message");
+         //$this->info("Received message on topic: $topic. Message: $message");
         if (strpos($topic, 'sensores') !== false) {
             $this->procMsgSensores($topic, $message);
         } else if (strpos($topic, 'avisos') !== false) {
             $this->procMsgAvisos($topic, $message);
         } else if (strpos($topic, 'reservatorios') !== false) {
             $this->procMsgReserv($topic, $message);
-        } else if (strpos($topic, 'dados_gerais') !== false) {
+        } else if (strpos($topic, 'dados') !== false) {
             $this->procMsgDados($topic, $message);
+        } else if (strpos($topic, 'sensor_nivel') !== false) {
+            $this->procMsgLevel($topic, $message);
+        } else if (strpos($topic, 'tempo') !== false) {
+            $this->procMsgTime($topic, $message);
         }else{
 
         }
@@ -209,6 +213,84 @@ class ConsumeSensorData extends Command
 
     }
 
+    private function procMsgLevel($topic, $msg)
+    {
+
+
+        $equipamento = explode('/', $topic)[0];
+
+        $last = DB::table('level_readings')->where('equipment_code', $equipamento)->orderBy('created_at', 'desc')->first();
+        $count = DB::table('level_readings')->where('equipment_code', $equipamento)->count();
+        $data = json_decode($msg, true);
+
+        if($count > 0){
+
+
+            if(!$this->isDuplicateLevel($last, $data)){
+
+                DB::table('level_readings')->insert([
+                    'equipment_code' => $equipamento,
+                    's1' => $data['s1'],
+                    's2' => $data['s2'],
+                    's3' => $data['s3'],
+                    'created_at' => now(),
+                ]);
+            }
+        }else{
+
+            DB::table('level_readings')->insert([
+                'equipment_code' => $equipamento,
+                's1' => $data['S1'],
+                's2' => $data['S2'],
+                's3' => $data['S3'],
+                'created_at' => now(),
+            ]);
+        }
+
+
+
+    }
+
+    private function procMsgTime($topic, $msg)
+    {
+
+
+        $equipamento = explode('/', $topic)[0];
+
+        $last = DB::table('time_readings')->where('equipment_code', $equipamento)->orderBy('created_at', 'desc')->first();
+        $count = DB::table('time_readings')->where('equipment_code', $equipamento)->count();
+        $data = json_decode($msg, true);
+
+        if($count > 0){
+
+
+            if(!$this->isDuplicateTime($last, $data)){
+
+                DB::table('time_readings')->insert([
+                    'equipment_code' => $equipamento,
+                    't_prime' => $data['T_Prime'],
+                    't_loop' => $data['T_Loop'],
+                    't_prod' => $data['T_Prod'],
+                    't_dados' => $data['T_Dados'],
+                    'created_at' => now(),
+                ]);
+            }
+        }else{
+
+            DB::table('time_readings')->insert([
+               'equipment_code' => $equipamento,
+                    't_prime' => $data['T_Prime'],
+                    't_loop' => $data['T_Loop'],
+                    't_prod' => $data['T_Prod'],
+                    't_dados' => $data['T_Dados'],
+                    'created_at' => now(),
+            ]);
+        }
+
+
+
+    }
+
     private function isDuplicate($last, $data)
     {
         return $last->cd_ou == $data['Pu_ou'] &&
@@ -218,7 +300,7 @@ class ConsumeSensorData extends Command
                $last->fx_in == $data['Fx_in'] &&
                $last->temp1 == $data['Temp1'] &&
                $last->tplc1 == $data['Tplc1'] &&
-               $last->t_pre == $data['T_pre'];
+               $last->t_pre == $data['Tr_pres'];
     }
 
     private function isDuplicateAvisos($last, $data)
@@ -234,6 +316,21 @@ class ConsumeSensorData extends Command
                $last->gal_1 == $data['Gal_1'] &&
                $last->gal_2 == $data['Gal_2'] &&
                $last->gal_3 == $data['Gal_3'];
+    }
+
+    private function isDuplicateLevel($last, $data)
+    {
+        return $last->s1 == $data['S1'] &&
+               $last->s2 == $data['S2'] &&
+               $last->s3 == $data['S3'];
+    }
+
+    private function isDuplicateTime($last, $data)
+    {
+        return $last->t_prime == $data['T_Prime'] &&
+               $last->t_loop == $data['T_Loop'] &&
+               $last->t_prod == $data['T_Prod'] &&
+               $last->t_dados == $data['T_Dados'];
     }
 
 

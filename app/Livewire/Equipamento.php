@@ -4,11 +4,14 @@ namespace App\Livewire;
 
 use App\Models\AlertReading;
 use App\Models\DataReadings;
+use App\Models\LevelReading;
 use App\Models\ReservReading;
 use Livewire\Component;
 use App\Models\SensorReading;
+use App\Models\TimeReading;
 use App\Services\AuvoService;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Type\Time;
 
 class Equipamento extends Component
 {
@@ -20,6 +23,8 @@ class Equipamento extends Component
     public $integra = false;
     public $avisos = [];
     public $reservs = [];
+    public $levels = [];
+    public $times = [];
     public $status = 'online';
     public $ultima_atualizacao;
 
@@ -39,6 +44,10 @@ class Equipamento extends Component
          $this->avisos = AlertReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
 
         $this->reservs = ReservReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->take(12)->get();
+
+        $this->levels = LevelReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
+
+        $this->times = TimeReading::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
 
         $last_reading = DataReadings::where('equipment_code', $this->equipamento['identifier'])->orderBy('created_at', 'desc')->first();
 
