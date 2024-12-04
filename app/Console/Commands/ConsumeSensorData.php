@@ -76,6 +76,12 @@ class ConsumeSensorData extends Command
             $this->procMsgLevel($topic, $message);
         } else if (strpos($topic, 'tempo') !== false) {
             $this->procMsgTime($topic, $message);
+        } else if (strpos($topic, 'atuadores/gerais') !== false) {
+            $this->procMsgActuator($topic, $message);
+        } else if (strpos($topic, 'atuadores/bombas') !== false) {
+            $this->procMsgBomb($topic, $message);
+        } else if (strpos($topic, 'atuadores/valvulas') !== false) {
+            $this->procMsgValve($topic, $message);
         }else{
 
         }
@@ -93,8 +99,6 @@ class ConsumeSensorData extends Command
         if ($data) {
             if ($count > 0 && $this->isDuplicate($last, $data)) {
 
-                //se ultimo registro for maior que 30 segundos setar status offline
-
 
             }else{
                 DB::table('sensor_readings')->insert([
@@ -107,10 +111,6 @@ class ConsumeSensorData extends Command
                     'temp1' => (float) $data['Temp1'],
                     'tplc1' => (float) $data['Tplc1'],
                     't_pre' => (float) $data['Tr_pres'],
-                    // 'gal_0' => (float) $data['Gal_0'],
-                    // 'gal_1' => (float) $data['Gal_1'],
-                    // 'gal_2' => (float) $data['Gal_2'],
-                    // 'gal_3' => (float) $data['Gal_3'],
                     'created_at' => now(),
                 ]);
             }
@@ -291,6 +291,130 @@ class ConsumeSensorData extends Command
 
     }
 
+    private function procMsgActuator($topic, $msg)
+    {
+
+
+        $equipamento = explode('/', $topic)[0];
+
+        $last = DB::table('actuator_readings')->where('equipment_code', $equipamento)->orderBy('created_at', 'desc')->first();
+        $count = DB::table('actuator_readings')->where('equipment_code', $equipamento)->count();
+        $data = json_decode($msg, true);
+
+        if($count > 0){
+
+
+            if(!$this->isDuplicateActuator($last, $data)){
+
+                DB::table('actuator_readings')->insert([
+                    'equipment_code' => $equipamento,
+                    'som' => $data['Som'],
+                    'lamp_uv' => $data['Lamp_Uv'],
+                    'b_pwm' => $data['B_PWM'],
+                    'coolers' => $data['Coolers'],
+                    'created_at' => now(),
+                ]);
+            }
+        }else{
+
+            DB::table('actuator_readings')->insert([
+               'equipment_code' => $equipamento,
+                    'som' => $data['Som'],
+                    'lamp_uv' => $data['Lamp_Uv'],
+                    'b_pwm' => $data['B_PWM'],
+                    'coolers' => $data['Coolers'],
+                    'created_at' => now(),
+            ]);
+        }
+
+
+
+    }
+
+    private function procMsgBomb($topic, $msg)
+    {
+
+
+        $equipamento = explode('/', $topic)[0];
+
+        $last = DB::table('bomb_readings')->where('equipment_code', $equipamento)->orderBy('created_at', 'desc')->first();
+        $count = DB::table('bomb_readings')->where('equipment_code', $equipamento)->count();
+        $data = json_decode($msg, true);
+
+        if($count > 0){
+
+
+            if(!$this->isDuplicateBomb($last, $data)){
+
+                DB::table('bomb_readings')->insert([
+                    'equipment_code' => $equipamento,
+                    'b_pres' => $data['B_Pres'],
+                    'b_rec' => $data['B_Rec'],
+                    'created_at' => now(),
+                ]);
+            }
+        }else{
+
+            DB::table('bomb_readings')->insert([
+               'equipment_code' => $equipamento,
+               'b_pres' => $data['B_Pres'],
+               'b_rec' => $data['B_Rec'],
+               'created_at' => now(),
+            ]);
+        }
+
+
+
+    }
+
+    private function procMsgValve($topic, $msg)
+    {
+
+
+        $equipamento = explode('/', $topic)[0];
+
+        $last = DB::table('valve_readings')->where('equipment_code', $equipamento)->orderBy('created_at', 'desc')->first();
+        $count = DB::table('valve_readings')->where('equipment_code', $equipamento)->count();
+        $data = json_decode($msg, true);
+
+        if($count > 0){
+
+
+            if(!$this->isDuplicateValve($last, $data)){
+
+                DB::table('valve_readings')->insert([
+                    'equipment_code' => $equipamento,
+                    'vd' => $data['VD'],
+                    'vl' => $data['VL'],
+                    've' => $data['VE'],
+                    'vr' => $data['VR'],
+                    'v5' => $data['V5'],
+                    'v6' => $data['V6'],
+                    'v7' => $data['V7'],
+                    'v8' => $data['V8'],
+                    'created_at' => now(),
+                ]);
+            }
+        }else{
+
+            DB::table('valve_readings')->insert([
+               'equipment_code' => $equipamento,
+               'vd' => $data['VD'],
+               'vl' => $data['VL'],
+               've' => $data['VE'],
+               'vr' => $data['VR'],
+               'v5' => $data['V5'],
+               'v6' => $data['V6'],
+               'v7' => $data['V7'],
+               'v8' => $data['V8'],
+               'created_at' => now(),
+            ]);
+        }
+
+
+
+    }
+
     private function isDuplicate($last, $data)
     {
         return $last->cd_ou == $data['Pu_ou'] &&
@@ -331,6 +455,32 @@ class ConsumeSensorData extends Command
                $last->t_loop == $data['T_Loop'] &&
                $last->t_prod == $data['T_Prod'] &&
                $last->t_dados == $data['T_Dados'];
+    }
+
+    private function isDuplicateActuator($last, $data)
+    {
+        return $last->som == $data['Som'] &&
+               $last->lamp_uv == $data['Lamp_Uv'] &&
+               $last->b_pwm == $data['B_PWM'] &&
+               $last->coolers == $data['Coolers'];
+    }
+
+    private function isDuplicateBomb($last, $data)
+    {
+        return $last->b_pres == $data['B_Pres'] &&
+               $last->b_rec == $data['B_Rec'];
+    }
+
+    private function isDuplicateValve($last, $data)
+    {
+        return $last->vd == $data['VD'] &&
+               $last->vl == $data['VL'] &&
+               $last->ve == $data['VE'] &&
+               $last->vr == $data['VR'] &&
+               $last->v5 == $data['V5'] &&
+               $last->v6 == $data['V6'] &&
+               $last->v7 == $data['V7'] &&
+               $last->v8 == $data['V8'];
     }
 
 

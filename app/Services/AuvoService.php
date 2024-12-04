@@ -67,10 +67,18 @@ class AuvoService
             'identifier' => $serialNumber,
         ]));
 
+
+        $cacheKey = "equipment_data_{$serialNumber}";
+        if (cache()->has($cacheKey)) {
+            return cache()->get($cacheKey);
+        }
+
         $response = $this->makeRequest('get', 'equipments/', ['paramFilter' => $filter]);
 
         if ($response->successful()) {
-            return $response->json();
+            $data = $response->json();
+            cache()->put($cacheKey, $data, now()->addMinutes(60)); // Cache for 60 minutes
+            return $data;
         }
 
         return null;
@@ -92,10 +100,19 @@ class AuvoService
     public function getClient($clientId)
     {
 
+        $cacheKey = "client_{$clientId}";
+        if (cache()->has($cacheKey)) {
+            return cache()->get($cacheKey);
+        }
+
+        // If not in cache, make the request
         $response = $this->makeRequest('get', 'customers/' . $clientId);
 
         if ($response->successful()) {
-            return $response->json()['result'];
+            $data = $response->json()['result'];
+            // Store the data in cache for future requests
+            cache()->put($cacheKey, $data, now()->addMinutes(60)); // Cache for 60 minutes
+            return $data;
         }
 
         return null;
@@ -114,12 +131,17 @@ class AuvoService
         ]);
 
 
+        $cacheKey = "tasks_{$clientId}";
+        if (cache()->has($cacheKey)) {
+            return cache()->get($cacheKey);
+        }
+
         $response = $this->makeRequest('get', 'tasks/', ['paramFilter' => $filter]);
 
-
-
         if ($response->successful()) {
-            return $response->json()['result']['entityList'];
+            $data = $response->json()['result']['entityList'];
+            cache()->put($cacheKey, $data, now()->addMinutes(60)); // Cache for 60 minutes
+            return $data;
         }
 
         return null;
@@ -137,10 +159,18 @@ class AuvoService
             ]));
         }
 
+
+        $cacheKey = "equipments_{$clientId}";
+        if (cache()->has($cacheKey)) {
+            return cache()->get($cacheKey);
+        }
+
         $response = $this->makeRequest('get', 'equipments/', ['paramFilter' => $filter]);
 
         if ($response->successful()) {
-            return $response->json()['result']['entityList'];
+            $data = $response->json()['result']['entityList'];
+            cache()->put($cacheKey, $data, now()->addMinutes(60)); // Cache for 60 minutes
+            return $data;
         }
 
         return null;
@@ -149,10 +179,20 @@ class AuvoService
     public function getEquipament($equipamentId)
     {
 
+
+        $cacheKey = "equipment_{$equipamentId}";
+        if (cache()->has($cacheKey)) {
+            return cache()->get($cacheKey);
+        }
+
+        // If not in cache, make the request
         $response = $this->makeRequest('get', 'equipments/' . $equipamentId);
 
         if ($response->successful()) {
-            return $response->json()['result'];
+            $data = $response->json()['result'];
+            // Store the data in cache for future requests
+            cache()->put($cacheKey, $data, now()->addMinutes(60)); // Cache for 60 minutes
+            return $data;
         }
 
         return null;
