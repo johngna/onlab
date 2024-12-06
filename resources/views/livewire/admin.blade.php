@@ -62,7 +62,7 @@
                     <dl>
                       <dt class="text-sm font-medium text-gray-500 truncate">Alertas</dt>
                       <dd>
-                        <div class="text-lg font-medium text-gray-900"></div>
+                        <div class="text-lg font-medium text-gray-900">@if(count($sem_cadastro)){{count($sem_cadastro)}} - <span class="text-xs text-orange-500">Sem cadastro no Auvo</span> @endif</div>
                       </dd>
                     </dl>
                   </div>
@@ -168,6 +168,28 @@
 
 
 
+          @if(count($sem_cadastro))
+            <h2 class="max-w-6xl px-4 mx-auto mt-8 text-lg font-medium leading-6 text-orange-900 sm:px-6 lg:px-8">Equipamentos sem Cadastro no Auvo</h2>
+
+            <div class="max-w-6xl px-4 mx-auto mt-2 sm:px-6 lg:px-8">
+            <table class="">
+                <thead>
+                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">Codigo</th>
+                </thead>
+                <tbody>
+                    @foreach($sem_cadastro as  $e)
+                    <tr>
+                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                            <div class="flex">
+                                <p class="text-gray-500 truncate group">{{$e}}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+            </table>
+            </div>
+
+          @endif
 
 
 

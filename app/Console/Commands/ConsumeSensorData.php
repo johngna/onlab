@@ -230,9 +230,9 @@ class ConsumeSensorData extends Command
 
                 DB::table('level_readings')->insert([
                     'equipment_code' => $equipamento,
-                    's1' => $data['s1'],
-                    's2' => $data['s2'],
-                    's3' => $data['s3'],
+                    's1' => $data['S1'],
+                    's2' => $data['S2'],
+                    's3' => $data['S3'],
                     'created_at' => now(),
                 ]);
             }

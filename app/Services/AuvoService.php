@@ -62,6 +62,7 @@ class AuvoService
     public function getEquipmentData($serialNumber)
     {
 
+
         //json filter
         $filter = urlencode(json_encode([
             'identifier' => $serialNumber,
